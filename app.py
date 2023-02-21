@@ -114,8 +114,9 @@ class PullForm(FlaskForm):
     submit = SubmitField()
 
 
-def upload_ftp(host, username, password, filename, remote_folder=""):
-    session = ftplib.FTP_TLS(host)
+def upload_ftp(host, username, password, filename, remote_folder="", port=21):
+    session = ftplib.FTP_TLS()
+    session.connect(host, port)
     session.login(username, password)
     with open(filename, 'rb') as f:  # file to send
         session.storbinary(f'STOR {os.path.join(remote_folder, os.path.basename(filename))}', f)
@@ -164,7 +165,11 @@ def pull():
                     break
 
                 log.info("Uploading file to ftp")
-                upload_ftp(uri.hostname, uri.username, uri.password, filename)
+                upload_ftp(uri.hostname,
+                           uri.username,
+                           uri.password,
+                           filename,
+                           port=uri.port if uri.port else 21)
 
                 if settings.delete_after_upload:
                     log.info("Deleting")
