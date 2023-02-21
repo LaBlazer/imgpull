@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+    <h1>Image pull</h1>
+    <p>Latest image</p>
+    <a href="{{ url_for('static', filename='pull/latest') }}">
+        <img src="{{ url_for('static', filename='pull/latest') }}" class="rounded mb-4 w-50 img-fluid mx-auto d-block">
+    </a>
+
+    {{ render_form(form) }}
+
+    {% if log %}
+    <a class="mt-3 btn btn-primary" data-bs-toggle="collapse" href="#log" role="button" aria-expanded="false" aria-controls="log">
+    Display log
+    </a>
+    <div class="collapse" id="log">
+      <div class="card card-body">
+        <pre><code>{{ log }}</code></pre>
+      </div>
+    </div>
+
+    {% endif %}
+
+{% endblock %}
