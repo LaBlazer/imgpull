@@ -60,6 +60,7 @@ class Job(threading.Thread):
         self.join()
 
     def run(self):
+        self.execute(*self.args, **self.kwargs)
         while not self.stopped.wait(self.interval.total_seconds()):
             self.execute(*self.args, **self.kwargs)
 
@@ -214,7 +215,6 @@ def home():
 if __name__ == '__main__':
     if (app.debug and os.environ.get("WERKZEUG_RUN_MAIN") == "true") or not app.debug:
         init_jobs()
-        pull()
 
     try:
         app.run()
